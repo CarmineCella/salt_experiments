@@ -39,3 +39,5 @@ for path in paths:
 print('final shape:', T.shape)
 print ('\nsaving...')
 np.savetxt(OUTPUT_CSV, T, delimiter=',')
+
+# eof

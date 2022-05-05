@@ -21,7 +21,11 @@ from sklearn.ensemble import RandomForestClassifier
 from pathlib import Path
 
 ## parameters #######
-num_samples = 600
+num_samples = 6000
+split = .75
+kn_neighbors = 5
+rf_estimators = 7
+save = 1
 ####################
 
 if len (sys.argv) < 2:
@@ -45,15 +49,15 @@ for i in range (1, len (sys.argv)):
         X[idx + k] = a[k]
         y[idx + k] = i
 
-print ('\ntotal classes: ', y.max ())
+print ('\ntotal classes: ', int (y.max ()))
 
 X_train, X_test, y_train, y_test = train_test_split(X,
                                                    y,
-                                                   test_size = 0.25,
+                                                   test_size = (1 - split),
                                                    random_state = 42,
                                                    shuffle=True)
 
-print('\nX train: ', X_train.shape)
+print('\nX train  : ', X_train.shape)
 print('X test   : ', X_test.shape)
 print('y train  : ', y_train.shape)
 print('y test   : ', y_test.shape)
@@ -62,8 +66,10 @@ clfs = []
 
 clfs.append(LogisticRegression(solver='lbfgs', max_iter=1000, multi_class='auto' ))
 clfs.append(SVC())
-clfs.append(KNeighborsClassifier(n_neighbors=3))
-clfs.append(RandomForestClassifier(n_estimators=5))
+clfs.append(KNeighborsClassifier(n_neighbors=kn_neighbors))
+clfs.append(RandomForestClassifier(n_estimators=rf_estimators))
+
+results = 'samples: ' + str (num_samples) + '\nkn_neighbors: ' + str (kn_neighbors)  + '\nrf_estimators: ' + str (rf_estimators) + '\nsplit: ' + str (split) + '\n\n'
 
 print ("\nrunning classifications...")
 for classifier in clfs:
@@ -79,9 +85,15 @@ for classifier in clfs:
 
     print("model scores: ", scores)
     print("average score: ", scores.mean ())
-
+    results += str (classifier) + ": " + str (scores.mean () * 100) + "%\n"
     pipeline.fit (X_train, y_train)
     ncvscore = pipeline.score(X_test, y_test)
     print("non cross-validated score: ", ncvscore)
 
-#eof
+results += '\n'
+if save == 1:
+    text_file = open("results/classification_" + str (int (y.max ())) + "_" + str (num_samples) + ".txt", "w")
+    n = text_file.write(results)
+    text_file.close()
+
+# eof
