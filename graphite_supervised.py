@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import matplotlib 
 import matplotlib.pyplot as plt
-import seaborn as sns
 import sys
 import os
 
@@ -39,6 +38,7 @@ y = np.zeros ((num_samples * n_classes,))
 print ('data size  : ' + str (X.shape))
 print ('labels size: ' + str (y.shape) + '\n')
 
+class_num = 0;
 for i in range (1, len (sys.argv)):
     arg = Path (sys.argv[i])   
     print ('processing ' +  str (arg) + '...')
@@ -47,9 +47,10 @@ for i in range (1, len (sys.argv)):
     idx = (i - 1) * num_samples
     for k in range (0, num_samples - 1):
         X[idx + k] = a[k]
-        y[idx + k] = i
+        y[idx + k] = class_num
+    class_num += 1
 
-print ('\ntotal classes: ', int (y.max ()))
+print ('\ntotal classes: ', n_classes)
 
 X_train, X_test, y_train, y_test = train_test_split(X,
                                                    y,

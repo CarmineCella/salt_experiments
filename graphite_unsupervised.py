@@ -17,7 +17,7 @@ from sklearn.utils import shuffle
 ## parameters #######
 dim_method = 'pca'
 num_samples = 6000
-threshold = 0.01
+threshold = 0
 save = 1
 ####################
 
@@ -52,12 +52,10 @@ print ('\nnormalizing...')
 T = preprocessing.Normalizer().fit_transform(T)
 T_orig = preprocessing.Normalizer().fit_transform(T_orig)
 
+# denoising (hard)
 if threshold > 0:
     T[T < threshold] =  0
     T_orig[T_orig < threshold] =  0
-
-plt.plot (T[1000, :])
-plt.show ()
 
 # Clustering using KMeans
 print ('\nclustering...')
