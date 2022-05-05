@@ -14,13 +14,17 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from pathlib import Path
 from sklearn.utils import shuffle
 
-intensities_size = 1738
+## parameters #######
+dim_method = 'pca'
 num_samples = 6000
+save = 1
+####################
 
 if len (sys.argv) < 2:
     print ('syntax is: python graphite_unsupervised.py input1.csv input2.csv ...')
     quit()
 
+intensities_size = 1738
 n_clusters = len (sys.argv) - 1 # number of cluster depends on input files
 print ('cluster(s) :', n_clusters)
 print ('sample(s)  :', num_samples)
@@ -54,7 +58,6 @@ centroids, labels = kmean_model.cluster_centers_, kmean_model.labels_
 print('centroid(s):', centroids.shape)
 print('label(s)   :', labels.size)
 
-dim_method = 'pca'
 print ('\ndimensionality reduction (' + dim_method + ')...')
 # Dimesionality reduction to 2
 if dim_method == 'isomap':
@@ -95,7 +98,8 @@ plt.title ('Graphite: ground truth')
 plt.xlabel (dim_method + ' 1')
 plt.ylabel (dim_method + ' 2')
 plt.legend ()
-plt.savefig ('results/gt_' + str (n_clusters) + '_' + str (dim_method)  + '_' + str (num_samples) + '.png')
+if save == 1:
+    plt.savefig ('results/gt_' + str (n_clusters) + '_' + str (dim_method)  + '_' + str (num_samples) + '.png')
 
 plt.figure (2)
 # plot the reduced components
@@ -118,7 +122,8 @@ for i in range (0, n_clusters):
 plt.title ('Graphite: ' + str (n_clusters) + ' classe(s) - unsupervised')
 plt.xlabel (dim_method + ' 1')
 plt.ylabel (dim_method + ' 2')
-plt.savefig ('results/clustering_' + str (n_clusters) + '_' + str (dim_method) + '_' + str (num_samples) + '.png')
+if save == 1:
+    plt.savefig ('results/clustering_' + str (n_clusters) + '_' + str (dim_method) + '_' + str (num_samples) + '.png')
 
 plt.show()
 

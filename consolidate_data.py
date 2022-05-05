@@ -9,7 +9,7 @@ import pandas as pd
 import sys
 
 intensities_size = 1738
-num_samples = 10000
+num_samples = 6000
 
 if len(sys.argv) != 3:
     print ("syntax is: python consolidate_data.py data_folder output.csv")
