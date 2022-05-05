@@ -29,7 +29,7 @@ save = 1
 ####################
 
 if len (sys.argv) < 2:
-    print ('syntax is: python graphite_unsupervised.py input1.csv input2.csv ...')
+    print ('syntax is: python graphite_supervised.py input1.csv input2.csv ...')
     quit()
 
 intensities_size = 1738
