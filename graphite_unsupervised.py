@@ -17,6 +17,7 @@ from sklearn.utils import shuffle
 ## parameters #######
 dim_method = 'pca'
 num_samples = 6000
+threshold = 0.01
 save = 1
 ####################
 
@@ -32,6 +33,7 @@ print ('features(s):', intensities_size)
 
 T = np.zeros ((num_samples * n_clusters, intensities_size))
 print ('data size  : ' + str (T.shape) + '\n')
+
 
 for i in range (1, len (sys.argv)):
     arg = Path (sys.argv[i])   
@@ -49,6 +51,13 @@ T = shuffle (T)
 print ('\nnormalizing...')
 T = preprocessing.Normalizer().fit_transform(T)
 T_orig = preprocessing.Normalizer().fit_transform(T_orig)
+
+if threshold > 0:
+    T[T < threshold] =  0
+    T_orig[T_orig < threshold] =  0
+
+plt.plot (T[1000, :])
+plt.show ()
 
 # Clustering using KMeans
 print ('\nclustering...')
@@ -82,7 +91,7 @@ print ('[reduced centroid(s)]')
 print(centroid_dim)
 
 # colors for plotting
-colors = ['blue', 'red', 'green', 'orange'] # FIXME only 4 classes
+colors = ['blue', 'red', 'green', 'orange', 'yellow', 'black', 'brown', 'purple'] # FIXME max 8 classes
 # assign a color to each features (note that we are using features as target)
 features_colors = [colors[labels[i]] for i in range(len(T))]
 
